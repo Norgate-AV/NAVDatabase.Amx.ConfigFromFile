@@ -78,6 +78,7 @@ DEFINE_MUTUALLY_EXCLUSIVE
 (***********************************************************)
 (* EXAMPLE: DEFINE_FUNCTION <RETURN_TYPE> <NAME> (<PARAMETERS>) *)
 (* EXAMPLE: DEFINE_CALL '<NAME>' (<PARAMETERS>) *)
+
 define_function Get(char path[], char name[]) {
     stack_var long handle
     stack_var char buffer[NAV_MAX_BUFFER]
@@ -103,18 +104,25 @@ define_function Get(char path[], char name[]) {
         result = NAVFileReadLine(handle, buffer)
 
         if (result <= 0) {
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => 0 Bytes Read'")
             continue
         }
 
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Line: ', buffer")
+
         if (NAVContains(buffer, EOF)) {
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Found EOF'")
             break
         }
 
         data = NAVGetStringBetween(buffer, '////', '////')
 
         if (!length_array(data) && !NAVContains(buffer, '////////')) {
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Empty Line'")
             continue
         }
+
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Line Value: ', data")
 
         line++
         send_string vdvObject, "'LINE-', itoa(line), ',', data"
@@ -142,7 +150,10 @@ data_event[vdvObject] {
     command: {
         stack_var _NAVSnapiMessage message
 
-        NAVLog(NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_COMMAND_FROM, data.device, data.text))
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                    NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_COMMAND_FROM,
+                                                data.device,
+                                                data.text))
 
         NAVParseSnapiMessage(data.text, message)
 
