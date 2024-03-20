@@ -1,7 +1,7 @@
 {
     "name": "NAVDatabase.Amx.ConfigFromFile",
     "description": "NetLinx module for reading configuration from a file",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "license": "MIT",
     "files": ["src/*.tko", "SymLink.ps1", "LICENSE", "README.md"],
     "repository": {
