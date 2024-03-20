@@ -13,7 +13,7 @@
 
 ---
 
-Description
+NetLinx module for reading configuration from a file.
 
 ## Contents 📖
 
