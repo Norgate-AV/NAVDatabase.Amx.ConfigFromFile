@@ -85,7 +85,7 @@ define_function Read(char path[]) {
     stack_var char buffer[NAV_MAX_BUFFER]
     stack_var integer line
     stack_var slong result
-    stack_var char data[NAV_MAX_BUFFER]
+    stack_var char data[255]
 
     if (!length_array(path)) {
         return
