@@ -100,6 +100,7 @@ define_function Read(char path[]) {
 
     handle = type_cast(result)
 
+    line = 0
     total = 0
     result = 1
 
