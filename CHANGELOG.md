@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.0.0...v2.0.1) (2025-01-16)
+
+### 🐛 Bug Fixes
+
+- fix release scripts ([27636ff](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/27636ff2f5ae980b98b6ba6e1653195975809b39))
+
 ## [2.0.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v1.0.0...v2.0.0) (2025-01-16)
 
 ### ⚠ BREAKING CHANGES
