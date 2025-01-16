@@ -109,21 +109,25 @@ define_function Read(char path[]) {
             continue
         }
 
-        NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Line: ', buffer")
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                    "'mConfigFromFile => Line: ', buffer")
 
         if (NAVContains(buffer, EOF)) {
-            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Found EOF'")
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                        "'mConfigFromFile => Found EOF'")
             break
         }
 
         data = NAVGetStringBetween(buffer, '////', '////')
 
         if (!length_array(data) && !NAVContains(buffer, '////////')) {
-            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Empty Line'")
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                        "'mConfigFromFile => Empty Line'")
             continue
         }
 
-        NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => Line Value: ', data")
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                    "'mConfigFromFile => Line Value: ', data")
 
         line++
         send_string vdvObject, "'LINE-', itoa(line), ',', data"
