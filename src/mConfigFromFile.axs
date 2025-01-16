@@ -86,6 +86,7 @@ define_function Read(char path[]) {
     stack_var integer line
     stack_var slong result
     stack_var char data[255]
+    stack_var long total
 
     if (!length_array(path)) {
         return
@@ -99,15 +100,17 @@ define_function Read(char path[]) {
 
     handle = type_cast(result)
 
+    total = 0
     result = 1
 
     while (result > 0) {
         result = NAVFileReadLine(handle, buffer)
 
         if (result <= 0) {
-            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mConfigFromFile => 0 Bytes Read'")
-            continue
+            break
         }
+
+        total = total + type_cast(result)
 
         NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
                     "'mConfigFromFile => Line: ', buffer")
@@ -134,6 +137,8 @@ define_function Read(char path[]) {
     }
 
     NAVFileClose(handle)
+    NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                "'mConfigFromFile => Total Bytes Read: ', itoa(total)")
 
     send_string vdvObject, "'DONE'"
 }
