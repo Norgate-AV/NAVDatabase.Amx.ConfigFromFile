@@ -3,6 +3,8 @@ MODULE_NAME='mConfigFromFile'       (
                                     )
 
 (***********************************************************)
+#DEFINE USING_NAV_MODULE_BASE_CALLBACKS
+#DEFINE USING_NAV_MODULE_BASE_PROPERTY_EVENT_CALLBACK
 #include 'NAVFoundation.ModuleBase.axi'
 #include 'NAVFoundation.FileUtils.axi'
 
@@ -59,8 +61,7 @@ DEFINE_TYPE
 (***********************************************************)
 DEFINE_VARIABLE
 
-volatile char filePath[NAV_MAX_BUFFER] = '\'
-volatile char fileName[NAV_MAX_BUFFER] = 'config.txt'
+volatile char path[255] = '/config.txt'
 
 
 (***********************************************************)
@@ -79,18 +80,18 @@ DEFINE_MUTUALLY_EXCLUSIVE
 (* EXAMPLE: DEFINE_FUNCTION <RETURN_TYPE> <NAME> (<PARAMETERS>) *)
 (* EXAMPLE: DEFINE_CALL '<NAME>' (<PARAMETERS>) *)
 
-define_function Get(char path[], char name[]) {
+define_function Read(char path[]) {
     stack_var long handle
     stack_var char buffer[NAV_MAX_BUFFER]
     stack_var integer line
     stack_var slong result
     stack_var char data[NAV_MAX_BUFFER]
 
-    if (!length_array(path) || !length_array(name)) {
+    if (!length_array(path)) {
         return
     }
 
-    result = NAVFileOpen("path, name", 'r')
+    result = NAVFileOpen(path, 'r')
 
     if (result <= 0) {
         return
@@ -134,6 +135,21 @@ define_function Get(char path[], char name[]) {
 }
 
 
+#IF_DEFINED USING_NAV_MODULE_BASE_PROPERTY_EVENT_CALLBACK
+define_function NAVModulePropertyEventCallback(_NAVModulePropertyEvent event) {
+    if (event.Device != vdvObject) {
+        return
+    }
+
+    switch (event.Name) {
+        case 'PATH': {
+            path = NAVTrimString(event.Args[1])
+        }
+    }
+}
+#END_IF
+
+
 (***********************************************************)
 (*                STARTUP CODE GOES BELOW                  *)
 (***********************************************************)
@@ -158,18 +174,8 @@ data_event[vdvObject] {
         NAVParseSnapiMessage(data.text, message)
 
         switch (message.Header) {
-            case 'PROPERTY': {
-                switch (message.Parameter[1]) {
-                    case 'FILE_NAME': {
-                        fileName = message.Parameter[2]
-                    }
-                    case 'FILE_PATH': {
-                        filePath = message.Parameter[2]
-                    }
-                }
-            }
             case 'GET_TEXT': {
-                Get(filePath, fileName)
+                Read(path)
             }
         }
     }
