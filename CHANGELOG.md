@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.3](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.0.2...v2.0.3) (2025-02-16)
+
+### 🚀 Performance
+
+- remove unnecessary logging ([5ff62ba](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/5ff62ba5201826a172a98d9bdc6eb32fe5f96f12))
+
 ## [2.0.2](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.0.1...v2.0.2) (2025-01-16)
 
 ### 🐛 Bug Fixes
