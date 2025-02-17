@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.0.3...v2.1.0) (2025-02-17)
+
+### 🌟 Features
+
+- bump NAVFoundation.Amx to 1.27.0 ([47b4469](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/47b44690751442e94e1824c0c6cf64e0e09e387a))
+
 ## [2.0.3](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.0.2...v2.0.3) (2025-02-16)
 
 ### 🚀 Performance
