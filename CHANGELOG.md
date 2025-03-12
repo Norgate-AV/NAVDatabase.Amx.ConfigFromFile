@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.1.0...v2.2.0) (2025-03-12)
+
+### 🌟 Features
+
+- update to support NAVFoundation.Amx v2.0.0 ([b3a722a](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/b3a722ac7ee80d1e52969a51012944117fe007c9))
+
 ## [2.1.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.0.3...v2.1.0) (2025-02-17)
 
 ### 🌟 Features
