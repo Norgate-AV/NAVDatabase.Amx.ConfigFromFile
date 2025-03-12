@@ -6,6 +6,8 @@ MODULE_NAME='mConfigFromFile'       (
 #DEFINE USING_NAV_MODULE_BASE_CALLBACKS
 #DEFINE USING_NAV_MODULE_BASE_PROPERTY_EVENT_CALLBACK
 #include 'NAVFoundation.ModuleBase.axi'
+#include 'NAVFoundation.StringUtils.axi'
+#include 'NAVFoundation.ErrorLogUtils.axi'
 #include 'NAVFoundation.FileUtils.axi'
 
 /*
