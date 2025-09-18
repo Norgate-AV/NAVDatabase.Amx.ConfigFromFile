@@ -51,7 +51,8 @@ DEFINE_DEVICE
 (***********************************************************)
 DEFINE_CONSTANT
 
-constant integer MAX_FILE_SIZE = 2048
+constant integer MAX_LINES = 500
+constant integer MAX_LINE_LENGTH = 255
 
 constant char EOF[] = '[END_OF_FILE]'
 
@@ -85,8 +86,9 @@ DEFINE_MUTUALLY_EXCLUSIVE
 (* EXAMPLE: DEFINE_CALL '<NAME>' (<PARAMETERS>) *)
 
 define_function GetConfig(char path[]) {
-    stack_var char data[MAX_FILE_SIZE]
-    stack_var char lines[1][255]
+    stack_var char data[MAX_LINES * MAX_LINE_LENGTH]
+    stack_var char lines[MAX_LINES][MAX_LINE_LENGTH]
+    stack_var integer count
     stack_var slong result
     stack_var long total
     stack_var integer x
@@ -105,26 +107,35 @@ define_function GetConfig(char path[]) {
 
     NAVLog("'mConfigFromFile => Total Bytes Read: ', itoa(total)")
 
-    NAVSplitString(data, "NAV_LF", lines)
+    count = NAVSplitString(data, "NAV_LF", lines)
 
-    for (x = 1; x <= length_array(lines); x++) {
-        NAVLog("'mConfigFromFile => Line: ', lines[x]")
+    if (count <= 0) {
+        return
+    }
 
+    for (x = 1; x <= count; x++) {
         if (NAVContains(lines[x], EOF)) {
-            NAVLog("'mConfigFromFile => EOF Found'")
             break
         }
 
         {
+            stack_var char line[MAX_LINE_LENGTH]
             stack_var char value[255]
 
-            value = NAVGetStringBetween(lines[x], '////', '////')
+            line = NAVTrimString(lines[x])
+            value = NAVGetStringBetween(line, '////', '////')
 
-            if (!length_array(value) || !NAVContains(lines[x], '////////')) {
+            if (!length_array(value) && !NAVContains(line, '////////')) {
                 continue
             }
 
-            NAVLog("'mConfigFromFile => Line Value: ', value")
+            NAVLog("'mConfigFromFile => Line ', itoa(x), ': ', line")
+
+            if (!length_array(value)) {
+                continue
+            }
+
+            NAVLog("'mConfigFromFile => Line ', itoa(x), ' Value: ', value")
 
             send_string vdvObject, "'LINE-', itoa(x), ',', value"
         }
