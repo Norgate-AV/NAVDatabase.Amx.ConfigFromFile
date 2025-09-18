@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.2.1](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.2.0...v2.2.1) (2025-09-18)
+
+### 🐛 Bug Fixes
+
+- correctly check for empty lines ([89cf75e](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/89cf75ec95d24f0ba7241f0b3dcc5aa48d0acde7))
+
+### 🚀 Performance
+
+- read entire file and parse ([ae49dd8](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/ae49dd85786f8bbf3c2d154dbd10f467a6269c71))
+
 ## [2.2.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.1.0...v2.2.0) (2025-03-12)
 
 ### 🌟 Features
