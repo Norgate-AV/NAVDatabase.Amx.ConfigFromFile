@@ -5,9 +5,9 @@ MODULE_NAME='mConfigFromFile'       (
 (***********************************************************)
 #DEFINE USING_NAV_MODULE_BASE_CALLBACKS
 #DEFINE USING_NAV_MODULE_BASE_PROPERTY_EVENT_CALLBACK
+#include 'NAVFoundation.Core.axi'
 #include 'NAVFoundation.ModuleBase.axi'
 #include 'NAVFoundation.StringUtils.axi'
-#include 'NAVFoundation.ErrorLogUtils.axi'
 #include 'NAVFoundation.FileUtils.axi'
 
 /*
@@ -51,6 +51,8 @@ DEFINE_DEVICE
 (***********************************************************)
 DEFINE_CONSTANT
 
+constant integer MAX_FILE_SIZE = 2048
+
 constant char EOF[] = '[END_OF_FILE]'
 
 (***********************************************************)
@@ -82,66 +84,51 @@ DEFINE_MUTUALLY_EXCLUSIVE
 (* EXAMPLE: DEFINE_FUNCTION <RETURN_TYPE> <NAME> (<PARAMETERS>) *)
 (* EXAMPLE: DEFINE_CALL '<NAME>' (<PARAMETERS>) *)
 
-define_function Read(char path[]) {
-    stack_var long handle
-    stack_var char buffer[NAV_MAX_BUFFER]
-    stack_var integer line
+define_function GetConfig(char path[]) {
+    stack_var char data[MAX_FILE_SIZE]
+    stack_var char lines[1][255]
     stack_var slong result
-    stack_var char data[255]
     stack_var long total
+    stack_var integer x
 
     if (!length_array(path)) {
         return
     }
 
-    result = NAVFileOpen(path, 'r')
+    result = NAVFileRead(path, data)
 
     if (result <= 0) {
         return
     }
 
-    handle = type_cast(result)
+    total = type_cast(result)
 
-    line = 0
-    total = 0
-    result = 1
+    NAVLog("'mConfigFromFile => Total Bytes Read: ', itoa(total)")
 
-    while (result > 0) {
-        result = NAVFileReadLine(handle, buffer)
+    NAVSplitString(data, "NAV_LF", lines)
 
-        if (result <= 0) {
+    for (x = 1; x <= length_array(lines); x++) {
+        NAVLog("'mConfigFromFile => Line: ', lines[x]")
+
+        if (NAVContains(lines[x], EOF)) {
+            NAVLog("'mConfigFromFile => EOF Found'")
             break
         }
 
-        total = total + type_cast(result)
+        {
+            stack_var char value[255]
 
-        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                    "'mConfigFromFile => Line: ', buffer")
+            value = NAVGetStringBetween(lines[x], '////', '////')
 
-        if (NAVContains(buffer, EOF)) {
-            NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                        "'mConfigFromFile => Found EOF'")
-            break
+            if (!length_array(value) || !NAVContains(lines[x], '////////')) {
+                continue
+            }
+
+            NAVLog("'mConfigFromFile => Line Value: ', value")
+
+            send_string vdvObject, "'LINE-', itoa(x), ',', value"
         }
-
-        data = NAVGetStringBetween(buffer, '////', '////')
-
-        if (!length_array(data) && !NAVContains(buffer, '////////')) {
-            NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                        "'mConfigFromFile => Empty Line'")
-            continue
-        }
-
-        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                    "'mConfigFromFile => Line Value: ', data")
-
-        line++
-        send_string vdvObject, "'LINE-', itoa(line), ',', data"
     }
-
-    NAVFileClose(handle)
-    NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                "'mConfigFromFile => Total Bytes Read: ', itoa(total)")
 
     send_string vdvObject, "'DONE'"
 }
@@ -181,8 +168,13 @@ data_event[vdvObject] {
         NAVParseSnapiMessage(data.text, message)
 
         switch (message.Header) {
-            case 'GET_TEXT': {
-                Read(path)
+            case 'GET_TEXT':
+            case 'GET_CONFIG': {
+                if (length_array(message.Parameter[1])) {
+                    path = NAVTrimString(message.Parameter[1])
+                }
+
+                GetConfig(path)
             }
         }
     }
