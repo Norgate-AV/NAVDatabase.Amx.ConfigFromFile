@@ -9,6 +9,7 @@ MODULE_NAME='mConfigFromFile'       (
 #include 'NAVFoundation.ModuleBase.axi'
 #include 'NAVFoundation.StringUtils.axi'
 #include 'NAVFoundation.FileUtils.axi'
+#include 'NAVFoundation.Cryptography.Sha256.axi'
 
 /*
  _   _                       _          ___     __
@@ -68,6 +69,8 @@ DEFINE_VARIABLE
 
 volatile char path[255] = '/config.txt'
 
+volatile char currentHash[64] = ''
+
 
 (***********************************************************)
 (*               LATCHING DEFINITIONS GO BELOW             *)
@@ -106,6 +109,22 @@ define_function GetConfig(char path[]) {
     total = type_cast(result)
 
     NAVLog("'mConfigFromFile => Total Bytes Read: ', itoa(total)")
+
+    // Compute SHA256 Hash of the file
+    {
+        stack_var char hash[64]
+
+        hash = NAVHexToString(NAVSha256GetHash(data))
+
+        if (hash == currentHash) {
+            NAVLog("'mConfigFromFile => File hash matches previous hash, no changes detected.'")
+            return
+        }
+
+        currentHash = hash
+        NAVLog("'mConfigFromFile => SHA256: ', hash")
+        send_string vdvObject, "'HASH-', hash"
+    }
 
     count = NAVSplitString(data, "NAV_LF", lines)
 
