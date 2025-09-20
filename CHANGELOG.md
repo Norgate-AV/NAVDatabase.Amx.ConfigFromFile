@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.2.1...v2.3.0) (2025-09-20)
+
+### 🌟 Features
+
+- computer sha256 on file contents ([c6406bd](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/c6406bd20ae47aed19af24e63b1b860aa6babb02))
+
 ## [2.2.1](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.2.0...v2.2.1) (2025-09-18)
 
 ### 🐛 Bug Fixes

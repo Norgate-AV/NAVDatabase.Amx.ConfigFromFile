@@ -1,7 +1,7 @@
 {
     "name": "navdatabase.amx.configfromfile",
     "displayName": "NAVDatabase.Amx.ConfigFromFile",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "keywords": [
         "amx",
         "netlinx",
