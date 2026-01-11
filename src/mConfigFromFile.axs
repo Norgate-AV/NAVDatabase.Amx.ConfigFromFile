@@ -100,12 +100,20 @@ define_function GetConfig(char path[]) {
         return
     }
 
-    result = NAVFileRead(path, data)
-
-    if (result <= 0) {
+    // Check if file exists
+    if (!NAVFileExists(path)) {
+        NAVLog("'mConfigFromFile => File does not exist at path: ', path")
         return
     }
 
+    result = NAVFileRead(path, data)
+
+    if (result <= 0) {
+        NAVLog("'mConfigFromFile => File read failed for path: ', path, ' (Error: ', NAVGetFileError(result), ')'")
+        return
+    }
+
+    // If read was successful, the result is the total bytes read
     total = type_cast(result)
 
     NAVLog("'mConfigFromFile => Total Bytes Read: ', itoa(total)")
