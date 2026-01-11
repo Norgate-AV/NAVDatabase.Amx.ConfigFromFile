@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.1](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.3.0...v2.3.1) (2026-01-11)
+
+### 🐛 Bug Fixes
+
+- add file existence check and improve error logging ([6af8390](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/commit/6af83908ba8247ab0fec3405910ebd813b2c30e8))
+
 ## [2.3.0](https://github.com/Norgate-AV/NAVDatabase.Amx.ConfigFromFile/compare/v2.2.1...v2.3.0) (2025-09-20)
 
 ### 🌟 Features
